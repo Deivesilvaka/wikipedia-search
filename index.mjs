@@ -39,8 +39,10 @@ export class Wikipedia {
         return text.replace(/\((?:\([^()]*\)|[^()])*\)/gm, '').replace(/  /g,' ')
     }
 
-    async search() {
+    async search(lang = 'pt') {
         try {
+            await wikipedia.setLang(lang)
+
             const apiContent = await wikipedia.page(this.query, {
                 autoSuggest: true,
             })
@@ -74,3 +76,5 @@ export class Wikipedia {
         }
     }
 }
+
+console.log(await new Wikipedia('Michael Jackson').search())
