@@ -4,23 +4,20 @@ import keyword_extractor  from 'keyword-extractor'
 
 export class Wikipedia {
 
-    constructor(query, sentencesQuantity = 10) {
+    constructor(query) {
         this.query = query
         this.description = ''
         this.content = {}
-        this.sentencesQuantity = sentencesQuantity
         this.sentences = []
+        this.sentencesQuantity = 0
         this.lang = ''
         this.keywords = []
     }
 
-    breakContentIntoSentences(content) {
-        this.sentences = []
+    #breakContentIntoSentences(content) {
         const sentences = sentenceBoundaryDetection.sentences(content ?? this.content.content)
-        
-        for(let sentence = 0; sentence < this.sentencesQuantity; sentence++){
-            this.sentences.push(sentences[sentence])
-        }
+        this.sentences = sentences
+        this.sentencesQuantity = sentences.length
         return
     }
 
@@ -82,7 +79,7 @@ export class Wikipedia {
             this.description = summary.description
 
             const sanitizedContent = this.#removeBlankLinesAndMarkDown(content)
-            this.breakContentIntoSentences(sanitizedContent)
+            this.#breakContentIntoSentences(sanitizedContent)
             this.#extractKeywords(sanitizedContent)
     
             this.content = {
@@ -102,3 +99,4 @@ export class Wikipedia {
     }
 }
 
+console.log(await new Wikipedia('comunismo').search())
