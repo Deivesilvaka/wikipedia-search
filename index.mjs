@@ -98,5 +98,3 @@ export class Wikipedia {
         }
     }
 }
-
-console.log(await new Wikipedia('comunismo').search())
